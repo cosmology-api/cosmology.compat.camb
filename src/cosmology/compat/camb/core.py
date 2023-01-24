@@ -3,9 +3,11 @@
 from __future__ import annotations
 
 from dataclasses import dataclass
-from typing import cast
+from typing import Any, cast
 
-from cosmology.api import CosmologyAPIConformant, CosmologyAPINamespace
+from cosmology.api import CosmologyAPINamespace, CosmologyWrapperAPI
+from numpy import floating
+from numpy.typing import NDArray
 
 import camb
 
@@ -13,7 +15,7 @@ __all__: list[str] = []
 
 
 @dataclass(frozen=True)
-class CAMBCosmology(CosmologyAPIConformant):
+class CAMBCosmology(CosmologyWrapperAPI[NDArray[floating[Any]]]):
     """The Cosmology API wrapper for :mod:`camb`."""
 
     cosmo: camb.CAMBdata
