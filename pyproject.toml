@@ -23,7 +23,8 @@
   ]
   dependencies = [
     "cosmology.api @ git+https://github.com/python-cosmology/cosmology-api.git",
-    "camb"
+    "camb",
+    "numpy>=1.20",
   ]
 
 [project.optional-dependencies]
@@ -137,6 +138,10 @@ where = ["src"]
 
   [[tool.mypy.overrides]]
     module="camb.*"
+    ignore_missing_imports = true
+
+  [[tool.mypy.overrides]]
+    module="numpy.*"
     ignore_missing_imports = true
 
 
