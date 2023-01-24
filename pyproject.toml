@@ -48,9 +48,9 @@
   ]
 
 [project.urls]
-  homepage = "https://cosmology.readthedocs.org/core"
-  repository = "https://github.com/python-cosmology/cosmology-core"
-  documentation = "https://cosmology.readthedocs.org/core"
+  homepage = "https://cosmology.readthedocs.org/camb"
+  repository = "https://github.com/cosmology-api/cosmology-compat-camb"
+  documentation = "https://cosmology.readthedocs.org/camb"
 
 
 [build-system]
@@ -148,7 +148,7 @@ select = ["ALL"]
 ignore = [
   "ANN101", "ANN102", "ANN401",
   "ARG001", "ARG002",
-  "D105", "D107", "D203", "D213",
+  "D105", "D107", "D203", "D213", "D401",
   "FBT003",
   "PD",
   "RET505", "RET506", "RET507",
