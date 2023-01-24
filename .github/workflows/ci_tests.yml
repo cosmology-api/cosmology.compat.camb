@@ -39,7 +39,6 @@ jobs:
           }
 
   tests:
-    name: ${{ matrix.name }}
     uses: OpenAstronomy/github-actions-workflows/.github/workflows/tox.yml@v1
     with:
       envs: |
@@ -50,9 +49,10 @@ jobs:
         - windows: py310-test-alldeps
         - macos: py310-test-alldeps
 
-      conda: 'true'
-      coverage: 'codecov'
-      fail-fast: 'true'
+      posargs: -n auto
+      conda: true
+      coverage: codecov
+      fail-fast: true
     secrets:
       CODECOV_TOKEN: ${{ secrets.CODECOV_TOKEN }}
 
