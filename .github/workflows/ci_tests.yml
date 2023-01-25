@@ -54,5 +54,6 @@ jobs:
 
       conda: true
       coverage: codecov
+      fail-fast: true
     secrets:
       CODECOV_TOKEN: ${{ secrets.CODECOV_TOKEN }}
