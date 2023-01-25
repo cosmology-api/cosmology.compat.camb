@@ -48,6 +48,9 @@ jobs:
         - linux: py39-test-oldestdeps-alldeps-cov-clocale
         - windows: py310-test-alldeps
         - macos: py310-test-alldeps
+          libraries:
+            brew:
+              - gcc
 
       conda: true
       coverage: codecov
