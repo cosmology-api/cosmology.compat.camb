@@ -73,4 +73,4 @@ class CAMBCosmology(CosmologyWrapperAPI[NDArray[floating[Any]]]):
         """
         import cosmology.compat.camb as namespace  # type: ignore[import]
 
-        return cast("CosmologyAPINamespace", namespace)
+        return cast(CosmologyAPINamespace, namespace)
