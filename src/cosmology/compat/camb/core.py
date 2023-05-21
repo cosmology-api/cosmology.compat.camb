@@ -5,9 +5,9 @@ from __future__ import annotations
 from dataclasses import dataclass
 from typing import Any, cast
 
-from cosmology.api import CosmologyAPINamespace, CosmologyWrapperAPI
+from cosmology.api import CosmologyNamespace, CosmologyWrapper
 from numpy import floating
-from numpy.typing import NDArray
+from numpy.typing import ArrayLike, NDArray
 
 import camb
 
@@ -15,7 +15,7 @@ __all__: list[str] = []
 
 
 @dataclass(frozen=True)
-class CAMBCosmology(CosmologyWrapperAPI[NDArray[floating[Any]]]):
+class CAMBCosmology(CosmologyWrapper[NDArray[floating[Any]], ArrayLike]):
     """The Cosmology API wrapper for :mod:`camb`."""
 
     cosmo: camb.CAMBdata
@@ -46,31 +46,9 @@ class CAMBCosmology(CosmologyWrapperAPI[NDArray[floating[Any]]]):
         self.params: camb.CAMBparams
         object.__setattr__(self, "params", params)
 
-    def __cosmology_namespace__(
-        self,
-        /,
-        *,
-        api_version: str | None = None,
-    ) -> CosmologyAPINamespace:
-        """Returns an object that has all the cosmology API functions on it.
+    @property
+    def __cosmology_namespace__(self, /) -> CosmologyNamespace:
+        """Returns a `CosmologyNamespace` with the cosmology API functions."""
+        import cosmology.compat.camb as namespace
 
-        Parameters
-        ----------
-        api_version: Optional[str]
-            string representing the version of the cosmology API specification
-            to be returned, in ``'YYYY.MM'`` form, for example, ``'2020.10'``.
-            If ``None``, it return the namespace corresponding to latest version
-            of the cosmology API specification.  If the given version is invalid
-            or not implemented for the given module, an error is raised.
-            Default: ``None``.
-
-            .. note:: currently only `None` is supported.
-
-        Returns
-        -------
-        `CosmologyAPINamespace`
-            An object representing the CAMB cosmology API namespace.
-        """
-        import cosmology.compat.camb as namespace  # type: ignore[import]
-
-        return cast(CosmologyAPINamespace, namespace)
+        return cast(CosmologyNamespace, namespace)
