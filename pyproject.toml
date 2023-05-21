@@ -22,7 +22,7 @@
     "Programming Language :: Python :: 3",
   ]
   dependencies = [
-    "cosmology.api @ git+https://github.com/python-cosmology/cosmology-api.git",
+    "cosmology.api",
     "camb",
     "numpy>=1.20",
   ]
@@ -98,25 +98,12 @@ where = ["src"]
   ]
 
 
-[tool.isort]
-  profile = "black"
-  include_trailing_comma = "True"
-  use_parentheses = "True"
-  ensure_newline_before_comments = "True"
-  known_localfolder = [
-    "cosmology.core",
-  ]
-  known_third_party = ["numpy", "pytest"]
-  import_heading_stdlib = "STDLIB"
-  import_heading_firstparty = "FIRST-PARTY"
-  import_heading_thirdparty = "THIRD-PARTY"
-  import_heading_localfolder = "LOCAL"
-
-
 [tool.mypy]
+  python_version = 3.9
+
   namespace_packages = true
   explicit_package_bases = true
-  python_version = 3.9
+  mypy_path = "$MYPY_CONFIG_FILE_DIR/src"
 
   strict = true
   disallow_subclassing_any = false
@@ -126,22 +113,18 @@ where = ["src"]
   warn_redundant_casts = true
   warn_unused_configs = true
   warn_unreachable = true
-  exclude = '''(^|/)tests/'''
+  exclude = '''(^|/)tests/|(^/)docs/|(^/)conftest\.py'''
 
   [[tool.mypy.overrides]]
     module = "tests/*"
     ignore_errors = true
 
   [[tool.mypy.overrides]]
-    module="cosmology.api.*"
-    ignore_missing_imports = true
-
-  [[tool.mypy.overrides]]
-    module="camb.*"
-    ignore_missing_imports = true
-
-  [[tool.mypy.overrides]]
-    module="numpy.*"
+    module=[
+      "camb.*",
+      "cosmology.api.*",
+      "numpy.*",
+    ]
     ignore_missing_imports = true
 
 
