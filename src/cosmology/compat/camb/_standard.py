@@ -424,9 +424,7 @@ class StandardCosmologyWrapper(CosmologyWrapper):
             self.comoving_transverse_distance(z2) / self.hubble_distance
         ) ** 2 / self.H_over_H0(z2) - (
             self.comoving_transverse_distance(z1) / self.hubble_distance
-        ) ** 2 / self.H_over_H0(
-            z1
-        )
+        ) ** 2 / self.H_over_H0(z1)
 
     # ----------------------------------------------
     # Angular diameter distance
