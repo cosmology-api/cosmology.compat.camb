@@ -1,77 +1,88 @@
-[project]
-  name = "cosmology.compat.camb"
-  version = "0.1.0"
-  description = "Cosmology API standard compatability library for CAMB"
-  readme = "README.rst"
-  requires-python = ">=3.9"
-  license = {file = "LICENSE"}
-  keywords = ["cosmology", "API"]
-  authors = [
-    {name = "Nathaniel Starkman", email = "n.starkman@mail.utoronto.ca"},
-    {name = "Nicolas Tessore", email = "n.tessore@ucl.ac.uk"}
+[build-system]
+  requires = [
+    "mypy>=0.991",
+    "setuptools>=45.0",
+    "setuptools_scm[toml]>=6.3.1",
   ]
-  maintainers = [
-    {name = "Nathaniel Starkman", email = "n.starkman@mail.utoronto.ca"},
-    {name = "Nicolas Tessore", email = "n.tessore@ucl.ac.uk"}
+
+  build-backend = 'setuptools.build_meta'
+
+[project]
+  authors = [
+    { name = "Nathaniel Starkman", email = "n.starkman@mail.utoronto.ca" },
+    { name = "Nicolas Tessore", email = "n.tessore@ucl.ac.uk" },
   ]
   classifiers = [
     "Intended Audience :: Science/Research",
     "Intended Audience :: Developers",
     "License :: OSI Approved :: BSD License",
     "Operating System :: OS Independent",
+    "Programming Language :: Python",
     "Programming Language :: Python :: 3",
+    "Programming Language :: Python :: 3 :: Only",
+    "Programming Language :: Python :: 3.10",
+    "Programming Language :: Python :: 3.11",
+    "Programming Language :: Python :: 3.12",
+    "Topic :: Scientific/Engineering",
+    "Typing :: Typed",
   ]
   dependencies = [
-    "cosmology.api",
-    "camb",
+    "cosmology.api @ git+https://github.com/cosmology-api/cosmology-api.git",
+    "camb>=1.1.0",
     "numpy>=1.20",
+    "typing_extensions>=3.7.4.2",
   ]
-
-[project.optional-dependencies]
-  all = [
+  description = "Cosmology API standard compatibility library for CAMB"
+  dynamic = ["version"]
+  keywords = ["cosmology", "API"]
+  license.file = "LICENSE.txt"
+  maintainers = [
+    { name = "Nathaniel Starkman", email = "n.starkman@mail.utoronto.ca" },
+    { name = "Nicolas Tessore", email = "n.tessore@ucl.ac.uk" },
   ]
-  test = [
-    "coverage[toml]",
-    "numpy>=1.19",
-    "pytest",
-    "pytest-astropy",
-  ]
-  docs = [
-    "graphviz",
-    "IPython",
-    "jupyter_client",
-    "nbsphinx",
-    "pydata-sphinx-theme",
-    "sphinx",
-    "sphinx-astropy",
-    "sphinxcontrib.bibtex < 3.0.0",
-    "tomlkit",
-  ]
+  name = "cosmology.compat.camb"
+  readme = "README.rst"
+  requires-python = ">=3.9"
 
-[project.urls]
-  homepage = "https://cosmology.readthedocs.org/camb"
-  repository = "https://github.com/cosmology-api/cosmology-compat-camb"
-  documentation = "https://cosmology.readthedocs.org/camb"
+  [project.optional-dependencies]
+    all = ["cosmology.compat.camb[docs]", "cosmology.compat.camb[test]"]
+    docs = [
+      "graphviz",
+      "IPython",
+      "jupyter_client",
+      "nbsphinx",
+      "pydata-sphinx-theme",
+      "sphinx",
+      "sphinx-astropy",
+      "sphinxcontrib.bibtex < 3.0.0",
+      "tomlkit",
+    ]
+    test = ["coverage[toml]", "numpy>=1.19", "pytest", "pytest-astropy"]
 
-
-[build-system]
-  requires = [
-    "mypy>=0.991",
-    "setuptools>=45.0",
-    "setuptools_scm[toml]>=6.3.1",
-    "wheel",
-  ]
-
-  build-backend = 'setuptools.build_meta'
+  [project.urls]
+    documentation = "https://cosmology.readthedocs.org/camb"
+    homepage = "https://cosmology.readthedocs.org/camb"
+    repository = "https://github.com/cosmology-api/cosmology.compat.camb"
 
 
 [tool.setuptools]
   package-dir = {"" = "src"}
 
-[tool.setuptools.packages.find]
-where = ["src"]
+  packages.find.where = ["src"]
 
 [tool.setuptools_scm]
+
+
+[tool.pytest.ini_options]
+  addopts = ["-ra", "--showlocals", "--strict-markers", "--strict-config"]
+  filterwarnings = [
+    "error",
+    "ignore:ast\\.Str is deprecated and will be removed in Python 3\\.14:DeprecationWarning",
+  ]
+  log_cli_level = "INFO"
+  minversion = "6.0"
+  testpaths = ["tests"]
+  xfail_strict = true
 
 
 [tool.coverage.run]
@@ -101,46 +112,69 @@ where = ["src"]
 [tool.mypy]
   python_version = 3.9
 
-  namespace_packages = true
   explicit_package_bases = true
   mypy_path = "$MYPY_CONFIG_FILE_DIR/src"
+  namespace_packages = true
 
-  strict = true
   disallow_subclassing_any = false
   disallow_untyped_defs = true
-  no_implicit_optional = true
-  warn_return_any = true
-  warn_redundant_casts = true
-  warn_unused_configs = true
-  warn_unreachable = true
+  enable_error_code = ["ignore-without-code", "redundant-expr", "truthy-bool"]
   exclude = '''(^|/)tests/|(^/)docs/|(^/)conftest\.py'''
+  no_implicit_optional = true
+  strict = true
+  warn_redundant_casts = true
+  warn_return_any = true
+  warn_unreachable = true
+  warn_unused_configs = true
 
   [[tool.mypy.overrides]]
-    module = "tests/*"
     ignore_errors = true
+    module = "tests/*"
 
   [[tool.mypy.overrides]]
-    module=[
-      "camb.*",
-      "cosmology.api.*",
-      "numpy.*",
-    ]
+    ignore_errors = true
+    module = "docs/*"
+
+  [[tool.mypy.overrides]]
     ignore_missing_imports = true
+    module = ["camb.*", "cosmology.api.*", "numpy.*", "hypothesis.*"]
 
 
 [tool.ruff]
-target-version = "py39"
-line-length = 88
+  src = ["src"]
 
-select = ["ALL"]
-ignore = [
-  "ANN101", "ANN102", "ANN401",
-  "ARG001", "ARG002",
-  "D105", "D107", "D203", "D213", "D401",
-  "FBT003",
-  "PD",
-  "RET505", "RET506", "RET507",
-]
+  [tool.ruff.lint]
+    ignore = [
+      "ANN101",
+      "ANN102",
+      "ANN401",
+      "ARG001",
+      "ARG002",
+      "COM812",
+      "D105",
+      "D107",
+      "D203",
+      "D213",
+      "D401",
+      "FBT003",
+      "FIX002", # Line contains TODO, consider resolving the issue.
+      "ISC001", # Conflicts with formatter
+      "N802",
+      "PD",
+      "RET505",
+      "RET506",
+      "RET507",
+      "TD002",  # Missing author in TODO
+      "TD003",  # Missing issue link on the line following this TODO
+    ]
+    select = ["ALL"]
 
-[tool.ruff.per-file-ignores]
-"test_*.py" = ["ANN", "D", "S101"]
+    [tool.ruff.lint.per-file-ignores]
+      "docs/*.py" = ["INP001"]
+      "test_*.py" = ["ANN", "D", "N8", "S101", "SLF001"]
+
+    [tool.ruff.lint.isort]
+      combine-as-imports = true
+      known-first-party = ["cosmology.api"]
+      known-local-folder = ["cosmology.compat.camb"]
+      known-third-party = ["camb", "numpy"]

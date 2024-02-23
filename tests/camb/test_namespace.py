@@ -1,7 +1,8 @@
 """Test the Cosmology API compat library."""
 
-import cosmology.compat.camb as namespace
 from cosmology.api import CosmologyNamespace
+
+import cosmology.compat.camb as namespace
 
 
 def test_namespace_is_compliant():
