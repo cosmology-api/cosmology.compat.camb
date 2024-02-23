@@ -1,1 +1,1 @@
-"""Test the Cosmology API CAMB compatability library."""
+"""Test the Cosmology API CAMB compatibility library."""
