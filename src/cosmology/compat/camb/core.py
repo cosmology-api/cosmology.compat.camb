@@ -5,11 +5,11 @@ from __future__ import annotations
 from dataclasses import dataclass
 from typing import Any, cast
 
-from cosmology.api import CosmologyNamespace, CosmologyWrapper
 from numpy import floating
 from numpy.typing import ArrayLike, NDArray
 
 import camb
+from cosmology.api import CosmologyNamespace, CosmologyWrapper
 
 __all__: list[str] = []
 
