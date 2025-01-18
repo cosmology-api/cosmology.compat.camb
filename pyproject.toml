@@ -140,6 +140,7 @@ ignore = [
   "FBT003",
   "PD",
   "RET505", "RET506", "RET507",
+  "RUF022",
 ]
 
 [tool.ruff.per-file-ignores]
