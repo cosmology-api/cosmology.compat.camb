@@ -37,8 +37,8 @@ license.text = "MIT"
 [project.optional-dependencies]
 test = [
   "cosmology.api",
-  "coverage[toml]",
-  "pytest"
+  "pytest",
+  "pytest-cov"
 ]
 
 [project.urls]
