@@ -1,4 +1,4 @@
-from typing import Any, Protocol, runtime_checkable
+from typing import Any, Protocol, Union, runtime_checkable
 
 import camb
 from numpy.typing import NDArray
@@ -6,7 +6,7 @@ from numpy.typing import NDArray
 import cosmology.api
 import cosmology.compat.camb
 
-Redshift = float | NDArray[Any]
+Redshift = Union[float, NDArray[Any]]
 Array = NDArray[Any]
 
 
