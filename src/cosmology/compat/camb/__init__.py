@@ -5,21 +5,22 @@ from __future__ import annotations
 from dataclasses import dataclass
 
 import numpy as np
-from numpy.typing import NDArray
 
 TYPE_CHECKING = False
 if TYPE_CHECKING:
-    import camb  # noqa: TC001
+    from numpy.typing import NDArray
 
-Array = NDArray[float]
+    from camb import CAMBdata, CAMBparams  # noqa: TC001
+
+    Array = NDArray[float]
 
 
 @dataclass
 class Cosmology:
     """Cosmology API wrapper for CAMB *pars* and *results*."""
 
-    pars: camb.CAMBparams
-    results: camb.CAMBdata
+    pars: CAMBparams
+    results: CAMBdata
 
     @property
     def h(self) -> Array:

@@ -29,7 +29,6 @@ classifiers = [
   "Programming Language :: Python :: 3"
 ]
 dependencies = [
-  "camb",
   "numpy>=2"
 ]
 license.text = "MIT"
@@ -40,6 +39,7 @@ doc = [
   "furo"
 ]
 test = [
+  "camb",
   "cosmology.api",
   "pytest",
   "pytest-cov"
@@ -114,6 +114,7 @@ ignore = [
   "ANN401",
   "ARG001",
   "ARG002",
+  "COM812",
   "D105",
   "D107",
   "D203",
