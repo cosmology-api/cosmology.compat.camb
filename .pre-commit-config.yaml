@@ -51,6 +51,7 @@ repos:
     rev: v1.15.0
     hooks:
       - id: mypy
-        files: ^glass/
+        files: ^src|^tests
         additional_dependencies:
           - numpy>=2.2.2
+        args: [--strict, --python-version=3.10]

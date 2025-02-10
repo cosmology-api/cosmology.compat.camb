@@ -8,11 +8,13 @@ import numpy as np
 
 TYPE_CHECKING = False
 if TYPE_CHECKING:
+    from typing import TypeAlias
+
     from numpy.typing import NDArray
 
     from camb import CAMBdata, CAMBparams  # noqa: TC001
 
-    Array = NDArray[float]
+    Array: TypeAlias = NDArray[np.float64]
 
 
 @dataclass
@@ -25,17 +27,17 @@ class Cosmology:
     @property
     def h(self) -> Array:
         """Little h."""
-        return np.array(self.params.h)
+        return np.array(self.pars.h)
 
     @property
     def H0(self) -> Array:
         """Hubble constant."""
-        return np.array(self.params.H0)
+        return np.array(self.pars.H0)
 
     @property
     def Omega_m0(self) -> Array:
         """Total matter today, excluding massive neutrinos."""
-        return np.array(self.params.omegam)
+        return np.array(self.pars.omegam)
 
     @property
     def Omega_de0(self) -> Array:
@@ -45,12 +47,12 @@ class Cosmology:
     @property
     def Omega_k0(self) -> Array:
         """Curvature today."""
-        return np.array(self.params.omk)
+        return np.array(self.pars.omk)
 
     @property
     def hubble_distance(self) -> Array:
         """Hubble distance."""
-        return np.array(299792.458 / self.params.H0)
+        return np.array(299792.458 / self.pars.H0)
 
     def H(self, z: Array | float) -> Array:
         """Hubble parameter at redshift *z*."""
