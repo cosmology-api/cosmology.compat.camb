@@ -35,6 +35,10 @@ dependencies = [
 license.text = "MIT"
 
 [project.optional-dependencies]
+doc = [
+  "sphinx",
+  "furo"
+]
 test = [
   "cosmology.api",
   "pytest",
@@ -126,3 +130,4 @@ ignore = [
 
 [tool.ruff.lint.per-file-ignores]
 "test_*.py" = ["ANN", "D", "S101"]
+"docs/*" = ["ALL"]
