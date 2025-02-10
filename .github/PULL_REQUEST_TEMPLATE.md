@@ -1,4 +1,5 @@
 ## Description
+
 <!-- Provide a general description of what your pull request does.
 Complete the following sentence and add relevant details as you see fit.
 In addition please ensure that the pull request title is descriptive
@@ -12,7 +13,6 @@ If this pull request is unrelated to any issues, please remove
 the following line. -->
 
 Fixes #<Issue Number>
-
 
 ## PR Checklist
 
