@@ -14,7 +14,7 @@ dynamic = [
 readme = "README.rst"
 requires-python = ">=3.9"
 authors = [
-  {name = "Nathaniel Starkman", email = "n.starkman@mail.utoronto.ca"},
+  {name = "Nathaniel Starkman", email = "starkman@mit.edu"},
   {name = "Nicolas Tessore", email = "n.tessore@ucl.ac.uk"}
 ]
 maintainers = [
