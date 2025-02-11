@@ -61,7 +61,9 @@ class Cosmology:
     def Omega_m(self, z: Array | float) -> Array:
         """Total matter, excluding massive neutrinos, at redshift *z*."""
         return np.array(
-            self.results.get_Omega("baryon", z) + self.results.get_Omega("cdm", z),
+            self.results.get_Omega("baryon", z)
+            + self.results.get_Omega("cdm", z)
+            + self.results.get_Omega("nu", z)
         )
 
     def Omega_de(self, z: Array | float) -> Array:
