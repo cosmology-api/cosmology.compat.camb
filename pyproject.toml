@@ -39,6 +39,7 @@ doc = [
   "furo"
 ]
 test = [
+  "astropy",
   "camb",
   "cosmology.api",
   "pytest",
