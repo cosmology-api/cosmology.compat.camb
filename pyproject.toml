@@ -52,7 +52,6 @@ Repository = "https://github.com/cosmology-api/cosmology.compat.camb"
 
 [tool.coverage.report]
 exclude_also = [
-  "class \\w+\\(Protocol(\\[(\\w+, )*\\w+\\])?\\):", # protocol classes
   "if TYPE_CHECKING:"
 ]
 
