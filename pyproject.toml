@@ -31,7 +31,7 @@ classifiers = [
 dependencies = [
   "numpy>=2"
 ]
-license.text = "MIT"
+license.text = "BSD-3-Clause"
 
 [project.optional-dependencies]
 doc = [
