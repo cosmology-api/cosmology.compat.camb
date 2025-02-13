@@ -1,0 +1,26 @@
+---
+name: Release
+on:
+  release:
+    types:
+      - published
+jobs:
+  build-and-inspect-package:
+    name: Build & inspect package.
+    runs-on: ubuntu-latest
+    steps:
+      - uses: actions/checkout@v4
+      - uses: hynek/build-and-inspect-python-package@v2
+  upload-to-pypi:
+    name: Upload package to PyPI
+    needs: build-and-inspect-package
+    runs-on: ubuntu-latest
+    permissions:
+      id-token: write
+    steps:
+      - name: Download built artifact to dist/
+        uses: actions/download-artifact@v4
+        with:
+          name: Packages
+          path: dist
+      - uses: pypa/gh-action-pypi-publish@release/v1
