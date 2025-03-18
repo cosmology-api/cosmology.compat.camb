@@ -12,7 +12,7 @@ if TYPE_CHECKING:
 
     from numpy.typing import NDArray
 
-    from camb import CAMBdata, CAMBparams  # noqa: TC001
+    from camb import CAMBdata, CAMBparams
 
     Array: TypeAlias = NDArray[np.float64]
 
