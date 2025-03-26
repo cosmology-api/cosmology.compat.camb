@@ -128,6 +128,8 @@ class Cosmology:
         constant = np.sqrt(np.abs(self.Omega_k0)) / self.hubble_distance
 
         if self.Omega_k0 > 0:
-            return np.sinh(constant * self.comoving_distance(z, z2)) / constant  # type: ignore[no-any-return]
+            return np.array(
+                np.sinh(constant * self.comoving_distance(z, z2)) / constant
+            )
 
-        return np.sin(constant * self.comoving_distance(z, z2)) / constant  # type: ignore[no-any-return]
+        return np.array(np.sin(constant * self.comoving_distance(z, z2)) / constant)
