@@ -110,3 +110,24 @@ class Cosmology:
         if z2 is not None:
             return np.array(self.results.angular_diameter_distance2(z, z2))
         return np.array(self.results.angular_diameter_distance(z))
+
+    def transverse_comoving_distance(
+        self,
+        z: Array | float,
+        z2: Array | float | None = None,
+    ) -> Array:
+        """Transverse comoving distance at redshift *z*.
+
+        If *z2* is given, computes the transverse comoving distance between
+        redshifts *z* and *z2*.
+
+        """
+        if self.Omega_k0 == 0:
+            return self.comoving_distance(z, z2)
+
+        constant = np.abs(np.sqrt(self.Omega_k0) / self.hubble_distance)
+
+        if self.Omega_k0 > 0:
+            return np.sinh(constant * self.comoving_distance(z, z2)) / constant  # type: ignore[no-any-return]
+
+        return np.sin(constant * self.comoving_distance(z, z2)) / constant  # type: ignore[no-any-return]
