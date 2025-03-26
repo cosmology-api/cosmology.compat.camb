@@ -54,6 +54,11 @@ class Cosmology:
         """Hubble distance."""
         return np.array(299792.458 / self.pars.H0)
 
+    @property
+    def critical_density0(self) -> Array:
+        """Critical density today."""
+        return np.array(3 * self.pars.H0**2 / (8 * np.pi * 4.302e-9))
+
     def H(self, z: Array | float) -> Array:
         """Hubble parameter at redshift *z*."""
         return np.array(self.results.hubble_parameter(z))

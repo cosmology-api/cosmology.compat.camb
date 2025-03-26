@@ -1,4 +1,5 @@
 import astropy.cosmology
+import astropy.units as u
 import camb
 import numpy as np
 import pytest
@@ -77,6 +78,14 @@ def test_hubble_distance(cosmo, compare):
         cosmo.hubble_distance,
         compare.hubble_distance.value,
         rtol=1e-10,
+    )
+
+
+def test_critical_density0(cosmo, compare):
+    np.testing.assert_allclose(
+        cosmo.critical_density0,
+        compare.critical_density0.to(u.solMass / u.Mpc**3).value,
+        rtol=1e-3,
     )
 
 
