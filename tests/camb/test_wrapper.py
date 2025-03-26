@@ -157,5 +157,5 @@ def test_H_over_H0(z, cosmo, compare):
     np.testing.assert_allclose(
         cosmo.H_over_H0(z),
         compare.H(z).value / compare.H0.value,
-        rtol=1e-3,
+        rtol=1e-4,
     )
