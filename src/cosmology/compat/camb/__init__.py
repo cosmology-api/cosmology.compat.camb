@@ -125,7 +125,7 @@ class Cosmology:
         if self.Omega_k0 == 0:
             return self.comoving_distance(z, z2)
 
-        constant = np.abs(np.sqrt(self.Omega_k0) / self.hubble_distance)
+        constant = np.sqrt(np.abs(self.Omega_k0)) / self.hubble_distance
 
         if self.Omega_k0 > 0:
             return np.sinh(constant * self.comoving_distance(z, z2)) / constant  # type: ignore[no-any-return]
