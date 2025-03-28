@@ -56,7 +56,15 @@ class Cosmology:
 
     def H(self, z: Array | float) -> Array:
         """Hubble parameter at redshift *z*."""
-        return np.array(self.results.hubble_parameter(z))
+        return np.array(
+            np.sqrt(
+                self.H0**2
+                * (
+                    self.Omega_m0 * (1 + z) ** 3
+                    + self.Omega_k0 * (1 + z) ** 2 * self.Omega_de0
+                )
+            )
+        )
 
     def Omega_m(self, z: Array | float) -> Array:
         """Total matter, excluding massive neutrinos, at redshift *z*."""
@@ -110,3 +118,7 @@ class Cosmology:
         if z2 is not None:
             return np.array(self.results.angular_diameter_distance2(z, z2))
         return np.array(self.results.angular_diameter_distance(z))
+
+    def H_over_H0(self, z: Array | float) -> Array:
+        """Standardised Hubble function :math:`E(z) = H(z)/H_0`."""
+        return self.H(z) / self.H0
