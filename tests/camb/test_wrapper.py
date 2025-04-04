@@ -39,6 +39,7 @@ def cosmo(compare):
         TCMB=compare.Tcmb0.value,
         num_nu_massless=compare.Neff - 1,
         num_nu_massive=1,
+        mnu=0.05,
     )
     results = camb.get_background(pars)
     return cosmology.compat.camb.Cosmology(pars, results)
@@ -64,7 +65,7 @@ def test_Omega_de0(cosmo, compare):
     np.testing.assert_allclose(
         cosmo.Omega_de0,
         compare.Ode0,
-        rtol=1e-3,
+        rtol=1e-10,
     )
 
 
@@ -84,7 +85,6 @@ def test_H(z, cosmo, compare):
     np.testing.assert_allclose(
         cosmo.H(z),
         compare.H(z).value,
-        rtol=1e-4,
     )
 
 
@@ -156,6 +156,5 @@ def test_angular_diameter_distance(z, cosmo, compare):
 def test_H_over_H0(z, cosmo, compare):
     np.testing.assert_allclose(
         cosmo.H_over_H0(z),
-        compare.H(z).value / compare.H0.value,
-        rtol=1e-4,
+        compare.Efunc(z),
     )
