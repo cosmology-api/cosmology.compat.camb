@@ -175,7 +175,7 @@ def test_transverse_comoving_distance(z, cosmo, compare):
 
     np.testing.assert_allclose(
         cosmo.transverse_comoving_distance(z1, z2),
-        compare.comoving_transverse_distance(z2).value
-        - compare.comoving_transverse_distance(z1).value,
-        rtol=0.3,
+        # astropy does not have a comoving_transverse_distance_z1z2 method
+        (1 + z2) * compare.angular_diameter_distance_z1z2(z1, z2).value,
+        rtol=1e-12,
     )
