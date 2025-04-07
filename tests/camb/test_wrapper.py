@@ -1,5 +1,4 @@
 import astropy.cosmology
-import astropy.units as u
 import camb
 import numpy as np
 import pytest

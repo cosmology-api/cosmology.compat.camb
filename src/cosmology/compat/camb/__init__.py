@@ -59,8 +59,9 @@ class Cosmology:
         """Critical density today in Msol Mpc-3."""
         # gravitational constant kappa = 8pi G/c^2 in Mpc Msol-1
         # uses nominal value of (G Msol) following IAU 2015
-        KAPPA = 1.202706180375887e-18
-        return np.array(self.results.grhocrit / KAPPA)
+        kappa = 1.202706180375887e-18
+        return np.array(self.results.grhocrit / kappa)
+
     def H(self, z: Array | float) -> Array:
         """Hubble parameter at redshift *z*."""
         return np.array(self.results.hubble_parameter(z))
