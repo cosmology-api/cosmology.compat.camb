@@ -118,3 +118,7 @@ class Cosmology:
         if z2 is not None:
             return np.array(self.results.angular_diameter_distance2(z, z2))
         return np.array(self.results.angular_diameter_distance(z))
+
+    def H_over_H0(self, z: Array | float) -> Array:
+        """Standardised Hubble function :math:`E(z) = H(z)/H_0`."""
+        return self.H(z) / self.H0
