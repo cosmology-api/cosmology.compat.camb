@@ -84,7 +84,7 @@ def test_hubble_distance(cosmo, compare):
 def test_critical_density0(cosmo, compare):
     np.testing.assert_allclose(
         cosmo.critical_density0,
-        compare.critical_density0.to(u.solMass / u.Mpc**3).value,
+        compare.critical_density0.to("Msun Mpc-3").value,
         rtol=1e-9,
     )
 
