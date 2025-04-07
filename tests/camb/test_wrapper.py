@@ -87,6 +87,7 @@ def test_H(z, cosmo, compare):
     np.testing.assert_allclose(
         cosmo.H(z),
         compare.H(z).value,
+        rtol=1e-12,
     )
 
 
