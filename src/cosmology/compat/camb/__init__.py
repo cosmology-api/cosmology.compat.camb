@@ -56,9 +56,11 @@ class Cosmology:
 
     @property
     def critical_density0(self) -> Array:
-        r"""Critical density today :math:`3*H_0^2/(8*\pi*G)`."""
-        return np.array(3 * self.pars.H0**2 / (8 * np.pi * 4.3009172706e-9))
-
+        """Critical density today in Msol Mpc-3."""
+        # gravitational constant kappa = 8pi G/c^2 in Mpc Msol-1
+        # uses nominal value of (G Msol) following IAU 2015
+        KAPPA = 1.202706180375887e-18
+        return np.array(self.results.grhocrit / KAPPA)
     def H(self, z: Array | float) -> Array:
         """Hubble parameter at redshift *z*."""
         return np.array(self.results.hubble_parameter(z))
