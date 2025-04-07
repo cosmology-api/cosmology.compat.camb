@@ -111,6 +111,10 @@ class Cosmology:
             return np.array(self.results.angular_diameter_distance2(z, z2))
         return np.array(self.results.angular_diameter_distance(z))
 
+    def H_over_H0(self, z: Array | float) -> Array:
+        """Standardised Hubble function :math:`E(z) = H(z)/H_0`."""
+        return self.H(z) / self.H0
+
     def transverse_comoving_distance(
         self,
         z: Array | float,
