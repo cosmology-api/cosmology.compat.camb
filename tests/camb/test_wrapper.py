@@ -17,24 +17,6 @@ def z(rng):
 
 
 @pytest.fixture(scope="session")
-def spaced_z(rng):
-    r"""Return $z \in [0, 500]$ where $z_{i+1} - z_{i} >= 1$."""
-    # Settings
-    low, high = 0, 500
-    min_spacing = 1
-    n = 100
-
-    # Generate random z values
-    total_gap = (high - low) - min_spacing * (n - 1)
-    assert total_gap > 0, "Total gap must be positive"
-    # sample random "extra" gaps to add between each pair
-    extra_gaps = rng.dirichlet(np.ones(n - 1)) * total_gap
-    gaps = min_spacing + extra_gaps
-    # cumulative sum to get positions
-    return low + np.concatenate([[0], np.cumsum(gaps)])
-
-
-@pytest.fixture(scope="session")
 def compare():
     return astropy.cosmology.LambdaCDM(
         H0=70.0,
@@ -182,18 +164,18 @@ def test_H_over_H0(z, cosmo, compare):
     )
 
 
-def test_transverse_comoving_distance(spaced_z, cosmo, compare):
+def test_transverse_comoving_distance(z, cosmo, compare):
     np.testing.assert_allclose(
-        cosmo.transverse_comoving_distance(spaced_z),
-        compare.comoving_transverse_distance(spaced_z).value,
-        rtol=1e-4,
+        cosmo.transverse_comoving_distance(z),
+        compare.comoving_transverse_distance(z).value,
+        rtol=1e-13,
     )
 
-    z1, z2 = spaced_z[:-1], spaced_z[1:]
+    z1, z2 = z[:-1], z[1:]
 
     np.testing.assert_allclose(
         cosmo.transverse_comoving_distance(z1, z2),
         compare.comoving_transverse_distance(z2).value
         - compare.comoving_transverse_distance(z1).value,
-        rtol=1,
+        rtol=0.3,
     )

@@ -126,14 +126,6 @@ class Cosmology:
         redshifts *z* and *z2*.
 
         """
-        if self.Omega_k0 == 0:
-            return self.comoving_distance(z, z2)
-
-        constant = np.sqrt(np.abs(self.Omega_k0)) / self.hubble_distance
-
-        if self.Omega_k0 > 0:
-            return np.array(
-                np.sinh(constant * self.comoving_distance(z, z2)) / constant
-            )
-
-        return np.array(np.sin(constant * self.comoving_distance(z, z2)) / constant)
+        if z2 is not None:
+            return np.array((1 + z2) * self.results.angular_diameter_distance2(z, z2))
+        return np.array((1 + z) * self.results.angular_diameter_distance(z))
