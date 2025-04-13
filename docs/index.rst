@@ -22,3 +22,34 @@ To create a Cosmology API-compliant ``cosmo`` object, wrap CAMB's ``pars`` and
    results = camb.get_background(pars)
 
    cosmo = cosmology.compat.camb.Cosmology(pars, results)
+
+
+Reference
+---------
+
+.. currentmodule:: cosmology.compat.camb
+
+.. autodata:: K_LINEAR
+
+.. autoproperty:: Cosmology.h
+.. autoproperty:: Cosmology.H0
+.. automethod:: Cosmology.H
+.. automethod:: Cosmology.H_over_H0
+
+.. autoproperty:: Cosmology.Omega_m0
+.. automethod:: Cosmology.Omega_m
+.. autoproperty:: Cosmology.Omega_de0
+.. automethod:: Cosmology.Omega_de
+.. autoproperty:: Cosmology.Omega_k0
+.. automethod:: Cosmology.Omega_k
+
+.. autoproperty:: Cosmology.critical_density0
+
+.. autoproperty:: Cosmology.hubble_distance
+.. automethod:: Cosmology.comoving_distance
+.. automethod:: Cosmology.transverse_comoving_distance
+.. automethod:: Cosmology.angular_diameter_distance
+
+.. automethod:: Cosmology.inv_comoving_distance
+
+.. automethod:: Cosmology.growth_factor

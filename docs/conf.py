@@ -6,18 +6,34 @@
 # -- Project information -----------------------------------------------------
 # https://www.sphinx-doc.org/en/master/usage/configuration.html#project-information
 
+
+def parse_package_authors(author_email):
+    """Get names from a package's Author-email field."""
+    import email, email.policy
+
+    msg = email.message_from_string(f"To: {author_email}", policy=email.policy.default)
+    return ", ".join(address.display_name for address in msg["to"].addresses)
+
+
+# -- Project information -----------------------------------------------------
+
 import importlib.metadata
 
-project = "cosmology.compat.camb"
-copyright = "2025, Nathaniel Starkman, Nicolas Tessore"
-author = "Nathaniel Starkman, Nicolas Tessore"
-release = importlib.metadata.version(project)
-version = release.partition("+")[0]
+metadata = importlib.metadata.metadata("cosmology.compat.camb")
+
+project = metadata["Name"]
+author = parse_package_authors(metadata["Author-email"])
+copyright = f"2025, {author}"
+release = metadata["Version"]
+version = release.partition("-")[0]
+
 
 # -- General configuration ---------------------------------------------------
 # https://www.sphinx-doc.org/en/master/usage/configuration.html#general-configuration
 
-extensions = []
+extensions = [
+    "sphinx.ext.autodoc",
+]
 
 templates_path = ["_templates"]
 exclude_patterns = ["_build", "Thumbs.db", ".DS_Store"]
