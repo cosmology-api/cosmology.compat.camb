@@ -122,3 +122,18 @@ class Cosmology:
     def H_over_H0(self, z: Array | float) -> Array:
         """Standardised Hubble function :math:`E(z) = H(z)/H_0`."""
         return self.H(z) / self.H0
+
+    def transverse_comoving_distance(
+        self,
+        z: Array | float,
+        z2: Array | float | None = None,
+    ) -> Array:
+        """Transverse comoving distance at redshift *z*.
+
+        If *z2* is given, computes the transverse comoving distance between
+        redshifts *z* and *z2*.
+
+        """
+        if z2 is not None:
+            return np.array((1 + z2) * self.results.angular_diameter_distance2(z, z2))
+        return np.array((1 + z) * self.results.angular_diameter_distance(z))

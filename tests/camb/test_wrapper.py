@@ -6,12 +6,12 @@ import pytest
 import cosmology.compat.camb
 
 
-@pytest.fixture
+@pytest.fixture(scope="session")
 def rng():
     return np.random.default_rng(42)
 
 
-@pytest.fixture
+@pytest.fixture(scope="session")
 def z(rng):
     return np.sort(rng.uniform(0.0, 5.0, 100))
 
@@ -168,5 +168,22 @@ def test_H_over_H0(z, cosmo, compare):
     np.testing.assert_allclose(
         cosmo.H_over_H0(z),
         compare.efunc(z),
+        rtol=1e-12,
+    )
+
+
+def test_transverse_comoving_distance(z, cosmo, compare):
+    np.testing.assert_allclose(
+        cosmo.transverse_comoving_distance(z),
+        compare.comoving_transverse_distance(z).value,
+        rtol=1e-13,
+    )
+
+    z1, z2 = z[:-1], z[1:]
+
+    np.testing.assert_allclose(
+        cosmo.transverse_comoving_distance(z1, z2),
+        # astropy does not have a comoving_transverse_distance_z1z2 method
+        (1 + z2) * compare.angular_diameter_distance_z1z2(z1, z2).value,
         rtol=1e-12,
     )
