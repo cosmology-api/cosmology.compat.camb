@@ -17,7 +17,7 @@ if TYPE_CHECKING:
     Array: TypeAlias = NDArray[np.float64]
 
 
-@dataclass
+@dataclass(frozen=True, slots=True)
 class Cosmology:
     """Cosmology API wrapper for CAMB *pars* and *results*."""
 
@@ -25,7 +25,7 @@ class Cosmology:
     params: CAMBparams = field(init=False)
 
     def __post_init__(self) -> None:
-        self.params = self.data.Params
+        object.__setattr__(self, "params", self.data.Params)
 
     @property
     def h(self) -> Array:
