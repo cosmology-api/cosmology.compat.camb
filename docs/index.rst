@@ -29,7 +29,7 @@ Reference
 
 .. currentmodule:: cosmology.compat.camb
 
-.. autodata:: K_LINEAR
+.. autodata:: K_GROWTH
 
 .. autoproperty:: Cosmology.h
 .. autoproperty:: Cosmology.H0

@@ -17,8 +17,8 @@ if TYPE_CHECKING:
     Array: TypeAlias = NDArray[np.float64]
 
 
-K_LINEAR: float = 1e-3
-"""Wavenumber for computations at "linear scales"."""
+K_GROWTH: float = 1e-3
+"""Wavenumber at which the growth factor is computed."""
 
 
 @dataclass
@@ -147,14 +147,14 @@ class Cosmology:
 
         Returns the growth factor of matter (``delta_tot`` in CAMB) at
         linear scales.  The wavenumber for linear scales is given by
-        :data:`K_LINEAR`.
+        :data:`K_GROWTH`.
 
         """
         # put redshift 0 first; this will normalise the growth factor
         _z = np.concatenate([[0.0], np.reshape(z, -1)])
 
         # compute redshift evolution at linear scale
-        evo = self.results.get_redshift_evolution(K_LINEAR, _z, ["delta_cdm"])
+        evo = self.results.get_redshift_evolution(K_GROWTH, _z, ["delta_tot"])
 
         # normalise growth factor and return in input shape
         return np.reshape(evo[1:, 0] / evo[0, 0], np.shape(z))
