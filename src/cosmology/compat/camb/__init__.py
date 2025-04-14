@@ -2,7 +2,7 @@
 
 from __future__ import annotations
 
-from dataclasses import dataclass
+from dataclasses import dataclass, field
 
 import numpy as np
 
@@ -21,38 +21,41 @@ if TYPE_CHECKING:
 class Cosmology:
     """Cosmology API wrapper for CAMB *pars* and *results*."""
 
-    pars: CAMBparams
-    results: CAMBdata
+    data: CAMBdata
+    params: CAMBparams = field(init=False)
+
+    def __post_init__(self) -> None:
+        self.params = self.data.Params
 
     @property
     def h(self) -> Array:
         """Little h."""
-        return np.array(self.pars.h)
+        return np.array(self.params.h)
 
     @property
     def H0(self) -> Array:
         """Hubble constant."""
-        return np.array(self.pars.H0)
+        return np.array(self.params.H0)
 
     @property
     def Omega_m0(self) -> Array:
         """Total matter today, excluding massive neutrinos."""
-        return np.array(self.pars.omegam)
+        return np.array(self.params.omegam)
 
     @property
     def Omega_de0(self) -> Array:
         """Dark energy today."""
-        return np.array(self.results.omega_de)
+        return np.array(self.data.omega_de)
 
     @property
     def Omega_k0(self) -> Array:
         """Curvature today."""
-        return np.array(self.pars.omk)
+        return np.array(self.params.omk)
 
     @property
     def hubble_distance(self) -> Array:
         """Hubble distance."""
-        return np.array(299792.458 / self.pars.H0)
+        return np.array(299792.458 / self.params.H0)
 
     @property
     def critical_density0(self) -> Array:
@@ -60,27 +63,27 @@ class Cosmology:
         # gravitational constant kappa = 8pi G/c^2 in Mpc Msol-1
         # uses nominal value of (G Msol) following IAU 2015
         kappa = 1.202706180375887e-18
-        return np.array(self.results.grhocrit / kappa)
+        return np.array(self.data.grhocrit / kappa)
 
     def H(self, z: Array | float) -> Array:
         """Hubble parameter at redshift *z*."""
-        return np.array(self.results.hubble_parameter(z))
+        return np.array(self.data.hubble_parameter(z))
 
     def Omega_m(self, z: Array | float) -> Array:
         """Total matter, excluding massive neutrinos, at redshift *z*."""
         return np.array(
-            self.results.get_Omega("baryon", z)
-            + self.results.get_Omega("cdm", z)
-            + self.results.get_Omega("nu", z)
+            self.data.get_Omega("baryon", z)
+            + self.data.get_Omega("cdm", z)
+            + self.data.get_Omega("nu", z)
         )
 
     def Omega_de(self, z: Array | float) -> Array:
         """Dark energy at redshift *z*."""
-        return np.array(self.results.get_Omega("de", z))
+        return np.array(self.data.get_Omega("de", z))
 
     def Omega_k(self, z: Array | float) -> Array:
         """Curvature at redshift *z*."""
-        return np.array(self.results.get_Omega("K", z))
+        return np.array(self.data.get_Omega("K", z))
 
     def comoving_distance(
         self,
@@ -95,14 +98,14 @@ class Cosmology:
         """
         if z2 is not None:
             return np.array(
-                self.results.comoving_radial_distance(z2)
-                - self.results.comoving_radial_distance(z),
+                self.data.comoving_radial_distance(z2)
+                - self.data.comoving_radial_distance(z),
             )
-        return np.array(self.results.comoving_radial_distance(z))
+        return np.array(self.data.comoving_radial_distance(z))
 
     def inv_comoving_distance(self, x: Array | float) -> Array:
         """Return redshift at which the comoving distance is *x*."""
-        return np.array(self.results.redshift_at_comoving_radial_distance(x))
+        return np.array(self.data.redshift_at_comoving_radial_distance(x))
 
     def angular_diameter_distance(
         self,
@@ -116,8 +119,8 @@ class Cosmology:
 
         """
         if z2 is not None:
-            return np.array(self.results.angular_diameter_distance2(z, z2))
-        return np.array(self.results.angular_diameter_distance(z))
+            return np.array(self.data.angular_diameter_distance2(z, z2))
+        return np.array(self.data.angular_diameter_distance(z))
 
     def H_over_H0(self, z: Array | float) -> Array:
         """Standardised Hubble function :math:`E(z) = H(z)/H_0`."""
@@ -135,5 +138,5 @@ class Cosmology:
 
         """
         if z2 is not None:
-            return np.array((1 + z2) * self.results.angular_diameter_distance2(z, z2))
-        return np.array((1 + z) * self.results.angular_diameter_distance(z))
+            return np.array((1 + z2) * self.data.angular_diameter_distance2(z, z2))
+        return np.array((1 + z) * self.data.angular_diameter_distance(z))
