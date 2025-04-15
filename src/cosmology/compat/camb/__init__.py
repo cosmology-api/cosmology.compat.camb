@@ -17,6 +17,10 @@ if TYPE_CHECKING:
     Array: TypeAlias = NDArray[np.float64]
 
 
+K_GROWTH: float = 1e-3
+"""Wavenumber at which the growth factor is computed."""
+
+
 @dataclass
 class Cosmology:
     """Cosmology API wrapper for CAMB *pars* and *results*."""
@@ -137,3 +141,20 @@ class Cosmology:
         if z2 is not None:
             return np.array((1 + z2) * self.results.angular_diameter_distance2(z, z2))
         return np.array((1 + z) * self.results.angular_diameter_distance(z))
+
+    def growth_factor(self, z: Array | float) -> Array:
+        """Growth factor of matter at redshift *z*.
+
+        Returns the growth factor of matter (``delta_tot`` in CAMB) at
+        linear scales.  The wavenumber for linear scales is given by
+        :data:`K_GROWTH`.
+
+        """
+        # put redshift 0 first; this will normalise the growth factor
+        _z = np.concatenate([[0.0], np.reshape(z, -1)])
+
+        # compute redshift evolution at linear scale
+        evo = self.results.get_redshift_evolution(K_GROWTH, _z, ["delta_tot"])
+
+        # normalise growth factor and return in input shape
+        return np.reshape(evo[1:, 0] / evo[0, 0], np.shape(z))

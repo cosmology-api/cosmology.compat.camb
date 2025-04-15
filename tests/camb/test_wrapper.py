@@ -2,8 +2,25 @@ import astropy.cosmology
 import camb
 import numpy as np
 import pytest
+import scipy.integrate
 
 import cosmology.compat.camb
+
+
+def growth_factor(redshift, cosmology, gamma=6.0 / 11.0):
+    """Growth factor from Omega_m^gamma."""
+
+    g = np.empty(np.shape(redshift))
+
+    for i, z in np.ndenumerate(redshift):
+        integral, _ = scipy.integrate.quad(
+            lambda z_: cosmology.Om(z_) ** gamma / (1 + z_),
+            0.0,
+            z,
+        )
+        g[i] = np.exp(-integral)
+
+    return g
 
 
 @pytest.fixture(scope="session")
@@ -186,4 +203,14 @@ def test_transverse_comoving_distance(z, cosmo, compare):
         # astropy does not have a comoving_transverse_distance_z1z2 method
         (1 + z2) * compare.angular_diameter_distance_z1z2(z1, z2).value,
         rtol=1e-12,
+    )
+
+
+def test_growth_factor(z, cosmo, compare):
+    # half a percent tolerance due to the inexact nature of the comparison
+    np.testing.assert_allclose(
+        cosmo.growth_factor(z),
+        growth_factor(z, compare),
+        atol=0.0,
+        rtol=0.005,
     )
