@@ -30,6 +30,6 @@ def test_api():
     pars = camb.set_params(H0=70.0)
     results = camb.get_background(pars)
 
-    cosmo = cosmology.compat.camb.Cosmology(pars, results)
+    cosmo = cosmology.compat.camb.Cosmology(results)
 
     assert isinstance(cosmo, Cosmology)

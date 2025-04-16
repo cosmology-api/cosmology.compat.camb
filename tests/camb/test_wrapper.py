@@ -44,7 +44,7 @@ def cosmo(compare):
         nnu=0.0,
     )
     results = camb.get_background(pars)
-    return cosmology.compat.camb.Cosmology(pars, results)
+    return cosmology.compat.camb.Cosmology(results)
 
 
 def test_h(cosmo, compare):

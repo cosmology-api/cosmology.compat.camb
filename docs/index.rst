@@ -10,8 +10,8 @@ CAMB and the `Cosmology API <https://cosmology.readthedocs.io>`_.
 Usage
 -----
 
-To create a Cosmology API-compliant ``cosmo`` object, wrap CAMB's ``pars`` and
-``results`` in ``cosmology.compat.camb.Cosmology``:
+To create a Cosmology API-compliant ``cosmo`` object, wrap CAMB's results in
+``cosmology.compat.camb.Cosmology``:
 
 .. code-block::
 
@@ -21,4 +21,4 @@ To create a Cosmology API-compliant ``cosmo`` object, wrap CAMB's ``pars`` and
    pars = camb.set_params(H0=70.0)
    results = camb.get_background(pars)
 
-   cosmo = cosmology.compat.camb.Cosmology(pars, results)
+   cosmo = cosmology.compat.camb.Cosmology(results)
