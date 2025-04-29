@@ -1,6 +1,7 @@
 ---
 ci:
   autofix_prs: false
+  autoupdate_schedule: monthly
   autoupdate_commit_msg: "pre-commit.ci: update pre-commit hooks"
   autofix_commit_msg: "pre-commit.ci: style fixes"
 
