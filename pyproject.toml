@@ -43,7 +43,8 @@ test = [
   "camb",
   "cosmology.api",
   "pytest",
-  "pytest-cov"
+  "pytest-cov",
+  "scipy"
 ]
 
 [project.urls]
