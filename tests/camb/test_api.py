@@ -1,9 +1,9 @@
 from typing import Any, Protocol, runtime_checkable
 
 import camb
+import cosmology.api
 from numpy.typing import NDArray
 
-import cosmology.api
 import cosmology.compat.camb
 
 Redshift = float | NDArray[Any]
