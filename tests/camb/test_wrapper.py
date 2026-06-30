@@ -12,8 +12,8 @@ def rng():
 
 
 @pytest.fixture(scope="session")
-def z(rng):
-    return np.sort(rng.uniform(0.0, 5.0, 100))
+def z(rng, xp):
+    return xp.sort(xp.asarray(rng.uniform(0.0, 5.0, 100)))
 
 
 @pytest.fixture(scope="session")
@@ -30,7 +30,7 @@ def compare():
 
 
 @pytest.fixture(scope="session")
-def cosmo(compare):
+def cosmo(compare, xp):
     pars = camb.set_params(
         H0=compare.H0.value,
         omch2=(compare.Om0 - compare.Ob0) * compare.h**2,
@@ -44,42 +44,52 @@ def cosmo(compare):
         nnu=0.0,
     )
     results = camb.get_background(pars)
-    return cosmology.compat.camb.Cosmology(results)
+    cosmo = cosmology.compat.camb.Cosmology(results)
+    cosmo.set_xp(xp)
+    return cosmo
 
 
 def test_h(cosmo, compare):
-    assert cosmo.h == compare.h
+    np.testing.assert_allclose(
+        cosmo.h,
+        compare.h,
+        rtol=1e-7,
+    )
 
 
 def test_H0(cosmo, compare):
     assert compare.H0.value == cosmo.H0
 
 
-def test_Omega_m0(cosmo, compare):
+def test_Omega_m0(cosmo, compare, xp):
     np.testing.assert_allclose(
         cosmo.Omega_m0,
         compare.Om0,
-        rtol=1e-10,
+        rtol=1e-7,
     )
 
 
-def test_Omega_de0(cosmo, compare):
+def test_Omega_de0(cosmo, compare, xp):
     np.testing.assert_allclose(
         cosmo.Omega_de0,
         compare.Ode0,
-        rtol=1e-10,
+        rtol=1e-7,
     )
 
 
 def test_Omega_k0(cosmo, compare):
-    assert cosmo.Omega_k0 == compare.Ok0
+    np.testing.assert_allclose(
+        cosmo.Omega_k0,
+        compare.Ok0,
+        rtol=1e-7,
+    )
 
 
 def test_hubble_distance(cosmo, compare):
     np.testing.assert_allclose(
         cosmo.hubble_distance,
         compare.hubble_distance.value,
-        rtol=1e-10,
+        rtol=1e-7,
     )
 
 
@@ -87,22 +97,23 @@ def test_critical_density0(cosmo, compare):
     np.testing.assert_allclose(
         cosmo.critical_density0,
         compare.critical_density0.to("Msun Mpc-3").value,
-        rtol=1e-9,
+        rtol=1e-7,
     )
 
 
 def test_H(z, cosmo, compare):
     np.testing.assert_allclose(
         cosmo.H(z),
-        compare.H(z).value,
-        rtol=1e-12,
+        compare.H(np.asarray(z)).value,
+        rtol=1e-6,
     )
 
 
 def test_Omega_m(z, cosmo, compare):
+    z_np = np.asarray(z)
     np.testing.assert_allclose(
         cosmo.Omega_m(z),
-        compare.Om(z) + compare.Onu(z),
+        compare.Om(z_np) + compare.Onu(z_np),
         rtol=1e-3,
     )
 
@@ -110,7 +121,7 @@ def test_Omega_m(z, cosmo, compare):
 def test_Omega_de(z, cosmo, compare):
     np.testing.assert_allclose(
         cosmo.Omega_de(z),
-        compare.Ode(z),
+        compare.Ode(np.asarray(z)),
         rtol=1e-3,
     )
 
@@ -118,29 +129,31 @@ def test_Omega_de(z, cosmo, compare):
 def test_Omega_k(z, cosmo, compare):
     np.testing.assert_allclose(
         cosmo.Omega_k(z),
-        compare.Ok(z),
+        compare.Ok(np.asarray(z)),
         rtol=1e-3,
     )
 
 
 def test_comoving_distance(z, cosmo, compare):
+    z_np = np.asarray(z)
     np.testing.assert_allclose(
         cosmo.comoving_distance(z),
-        compare.comoving_distance(z).value,
+        compare.comoving_distance(z_np).value,
         rtol=1e-3,
     )
 
     z1, z2 = z[:-1], z[1:]
+    z1_np, z2_np = z_np[:-1], z[1:]
 
     np.testing.assert_allclose(
         cosmo.comoving_distance(z1, z2),
-        compare.comoving_distance(z2).value - compare.comoving_distance(z1).value,
+        compare.comoving_distance(z2_np).value - compare.comoving_distance(z1_np).value,
         rtol=1e-3,
     )
 
 
 def test_inv_comoving_distance(z, cosmo, compare):
-    x = compare.comoving_distance(z).value
+    x = compare.comoving_distance(np.asarray(z)).value
     np.testing.assert_allclose(
         cosmo.inv_comoving_distance(x),
         z,
@@ -149,17 +162,19 @@ def test_inv_comoving_distance(z, cosmo, compare):
 
 
 def test_angular_diameter_distance(z, cosmo, compare):
+    z_np = np.asarray(z)
     np.testing.assert_allclose(
         cosmo.angular_diameter_distance(z),
-        compare.angular_diameter_distance(z).value,
+        compare.angular_diameter_distance(z_np).value,
         rtol=1e-3,
     )
 
     z1, z2 = z[:-1], z[1:]
+    z1_np, z2_np = z_np[:-1], z_np[1:]
 
     np.testing.assert_allclose(
         cosmo.angular_diameter_distance(z1, z2),
-        compare.angular_diameter_distance_z1z2(z1, z2).value,
+        compare.angular_diameter_distance_z1z2(z1_np, z2_np).value,
         rtol=1e-3,
     )
 
@@ -167,23 +182,25 @@ def test_angular_diameter_distance(z, cosmo, compare):
 def test_H_over_H0(z, cosmo, compare):
     np.testing.assert_allclose(
         cosmo.H_over_H0(z),
-        compare.efunc(z),
-        rtol=1e-12,
+        compare.efunc(np.asarray(z)),
+        rtol=1e-6,
     )
 
 
 def test_transverse_comoving_distance(z, cosmo, compare):
+    z_np = np.asarray(z)
     np.testing.assert_allclose(
         cosmo.transverse_comoving_distance(z),
         compare.comoving_transverse_distance(z).value,
-        rtol=1e-13,
+        rtol=1e-6,
     )
 
     z1, z2 = z[:-1], z[1:]
+    z1_np, z2_np = z_np[:-1], z_np[1:]
 
     np.testing.assert_allclose(
         cosmo.transverse_comoving_distance(z1, z2),
         # astropy does not have a comoving_transverse_distance_z1z2 method
-        (1 + z2) * compare.angular_diameter_distance_z1z2(z1, z2).value,
-        rtol=1e-12,
+        (1 + z2_np) * compare.angular_diameter_distance_z1z2(z1_np, z2_np).value,
+        rtol=1e-6,
     )

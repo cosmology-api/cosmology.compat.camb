@@ -26,10 +26,11 @@ class Cosmology(
 ): ...
 
 
-def test_api():
+def test_api(xp):
     pars = camb.set_params(H0=70.0)
     results = camb.get_background(pars)
 
     cosmo = cosmology.compat.camb.Cosmology(results)
+    cosmo.set_xp(xp)
 
     assert isinstance(cosmo, Cosmology)

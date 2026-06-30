@@ -5,6 +5,9 @@ ci:
   autoupdate_commit_msg: "pre-commit.ci: update pre-commit hooks"
   autofix_commit_msg: "pre-commit.ci: style fixes"
 
+default_language_version:
+  python: python3.10
+
 repos:
   - repo: https://github.com/pre-commit/pre-commit-hooks
     rev: v6.0.0
@@ -49,10 +52,12 @@ repos:
     hooks:
       - id: prettier
   - repo: https://github.com/pre-commit/mirrors-mypy
-    rev: v1.20.0
+    rev: v2.1.0
     hooks:
       - id: mypy
         files: ^src|^tests
         additional_dependencies:
           - numpy>=2.2.2
+          - jaxtyping
+          - array-api-strict
         args: [--strict, --python-version=3.10]
