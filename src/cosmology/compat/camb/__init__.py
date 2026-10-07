@@ -1,3 +1,4 @@
+# Copyright (c) 2022, Nathaniel Starkman and Nicolas Tessore
 """Cosmology API compatibility layer for CAMB."""
 
 from __future__ import annotations

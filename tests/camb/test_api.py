@@ -1,3 +1,4 @@
+# Copyright (c) 2022, Nathaniel Starkman and Nicolas Tessore
 from typing import Any, Protocol, runtime_checkable
 
 import camb
