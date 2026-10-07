@@ -1,3 +1,4 @@
+# Copyright (c) 2022, Nathaniel Starkman and Nicolas Tessore
 import astropy.cosmology
 import camb
 import numpy as np
